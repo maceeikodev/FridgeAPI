@@ -34,5 +34,11 @@ Making your custom spoilable food or drinks compatible with more fridges can be 
 
 The following example makes ExampleFood compatible with FridgeAPI:
 ```cs
-
+var exampleFood = GameObject.Find("Example");
+var spoilableFood = exampleFood.AddComponent<SpoilableFood>();
+// It's important that you set this field to false if you are not using a clone of vanilla food FSM
+spoilableFood.isDrivenByPlaymaker = false;
+// If you are using custom food monobehaviour, then link it to this condition field
+// This condition field is lowered automatically. If it goes below zero 
+spoilableFood.condition = 100f;
 ```
