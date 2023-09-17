@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Linq;
 using HutongGames.PlayMaker;
+using HutongGames.PlayMaker.Actions;
 
 namespace FridgeAPI
 {
@@ -76,23 +77,18 @@ namespace FridgeAPI
             };
 
             // Edit food prefabs
-            // We have to use Resources.FindObjectsOfTypeAll as Spawner is disabled in PreLoad
-            var objs = Resources.FindObjectsOfTypeAll<Transform>();
-            foreach (var item in objs)
+            // Spawner has to be found through an FSM because it's disabled in PreLoad
+            var setupGame = GameObject.Find("Systems/Setup Game").GetComponent<PlayMakerFSM>();
+            var spawner = ((ActivateGameObject)setupGame.FsmStates[0].Actions[2]).gameObject.GameObject.Value.transform.Find("CreateItems");
+            var fsms = spawner.GetComponents<PlayMakerFSM>();
+            foreach (var fsm in fsms)
             {
-                if (item.name != "Spawner") continue;
-                var spawner = item.Find("CreateItems");
-                var fsms = spawner.GetComponents<PlayMakerFSM>();
-                foreach (var fsm in fsms)
-                {
-                    // If this item doesn't have condition, skip
-                    if (fsm.FsmVariables.FloatVariables.FirstOrDefault(f => f.Name == "Condition") == null) continue;
+                // If this item doesn't have condition, skip
+                if (fsm.FsmVariables.FloatVariables.FirstOrDefault(f => f.Name == "Condition") == null) continue;
 
-                    // Get the prefab
-                    var prefab = fsm.GetVariable<FsmGameObject>("CreatePrefab").Value;
-                    prefab.AddComponent<SpoilableFood>();
-                }
-                break;
+                // Get the prefab
+                var prefab = fsm.GetVariable<FsmGameObject>("CreatePrefab").Value;
+                prefab.AddComponent<SpoilableFood>();
             }
         }
     }
