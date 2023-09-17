@@ -18,6 +18,11 @@ namespace FridgeAPI
         /// </summary>
         public float condition = 100f;
 
+        /// <summary>
+        /// Called when the condition drops below 0 and this component is destroyed
+        /// </summary>
+        public System.Action FoodSpoiled;
+
         Fridge currentFridge;
         /// <summary>
         /// The fridge the food is currently in (if it's disabled it's like there is no fridge, and if it's null the food is not in a fridge)
@@ -73,6 +78,16 @@ namespace FridgeAPI
                 return;
             }
             spoilWaitAction.Enabled = false;
+
+            // Add transition to state Bad when the item spoils
+            var transitions = new FsmTransition[waitPlayerState.Transitions.Length + 1];
+            waitPlayerState.Transitions.CopyTo(transitions, 0);
+            transitions[transitions.Length - 1] = new FsmTransition
+            {
+                ToState = "Bad",
+                FsmEvent = foodFSM.FsmEvents.First(e => e.Name == SpoiledEvent)
+            };
+            waitPlayerState.Transitions = transitions;
         }
 
         void OnTriggerEnter(Collider other)
@@ -100,6 +115,7 @@ namespace FridgeAPI
             {
                 // If item is spoiled we don't need this script anymore
                 if (isDrivenByPlaymaker && foodFSM != null) foodFSM.SendEvent(SpoiledEvent);
+                FoodSpoiled?.Invoke();
                 Destroy(this);
                 return;
             }
