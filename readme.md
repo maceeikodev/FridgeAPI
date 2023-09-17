@@ -26,7 +26,7 @@ private void load_fridgeAPI()
 }
 ```
 
-It is important that you reference FridgeAPI in a different method because otherwise the mod will crash if FridgeAPI wasn't present.
+It is important that you reference FridgeAPI in a different method because otherwise the mod will crash if FridgeAPI isn't present.
 
 ## How to make custom spoilable food compatible with more fridges
 
