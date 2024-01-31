@@ -32,11 +32,11 @@ namespace FridgeAPI
 
         public override void ModSettings()
         {
-            slider_globalSpoilingRate = Settings.AddSlider(this, "gsr", "Global spoiling rate outside of fridges", 0f, 0.1f,
+            slider_globalSpoilingRate = Settings.AddSlider(this, "default_spoil_rate", "Global spoiling rate outside of fridges", 0f, 0.1f,
                 .034f, () => { Fridge.GLOBAL_SpoilingRate = slider_globalSpoilingRate.GetValue(); }, 4);
-            slider_globalSpoilingRateFridge = Settings.AddSlider(this, "gsr", "Global spoiling rate inside of fridges", 0f, 0.002f,
+            slider_globalSpoilingRateFridge = Settings.AddSlider(this, "fridge_spoil_rate", "Global spoiling rate inside of fridges", 0f, 0.002f,
                 .0005f, () => { Fridge.GLOBAL_SpoilingRateFridge = slider_globalSpoilingRateFridge.GetValue(); }, 4);
-            slider_globalSpoilingRateFreezer = Settings.AddSlider(this, "gsr", "Global spoiling rate inside of freezers", 0f, 0.001f,
+            slider_globalSpoilingRateFreezer = Settings.AddSlider(this, "freezer_spoil_rate", "Global spoiling rate inside of freezers", 0f, 0.001f,
                 .0001f, () => { Fridge.GLOBAL_SpoilingRateFreezer = slider_globalSpoilingRateFreezer.GetValue(); }, 4);
         }
 
